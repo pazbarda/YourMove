@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YourMoveApp", "YourMoveApp\YourMoveApp.csproj", "{141F475A-C256-4476-835F-BD21B0A6F6CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{141F475A-C256-4476-835F-BD21B0A6F6CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{141F475A-C256-4476-835F-BD21B0A6F6CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{141F475A-C256-4476-835F-BD21B0A6F6CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{141F475A-C256-4476-835F-BD21B0A6F6CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A90AE6FA-10C5-4F33-825E-D40D10BD11F7}
+	EndGlobalSection
+EndGlobal
