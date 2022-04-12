@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.commons.model
 {
-    internal enum GameStatus
+    public enum GameStatus
     {
         UMATCHED,
         ONGOING,

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.commons.model
 {
-    internal class Player
+    public class Player
     {
         private int Id { get; set; }
         private char GameCharacter { get; set; }

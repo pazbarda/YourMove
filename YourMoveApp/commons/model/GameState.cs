@@ -6,28 +6,22 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.commons.model
 {
-    internal class GameState
+    public class GameState
     {
-        private int Id { get; }
-        private GameStatus GameStatus { get; }
-        
-        char[][] Board {
+        public int Id { get; }
+        public GameStatus GameStatus { get; }
+
+        public char[][] Board {
             get { return this._board; } 
         }
-        Player[] Players { get; }
-        Player NextPlayer
+        public Player[] Players { get; }
+        public Player NextPlayer
         {
             get { return Players[_nextPlayerIndex]; }
         }
 
         private char[][] _board;
         private int _nextPlayerIndex;
-
-
-        public GameState(int id, GameStatus gameStatus, char[][] board, Player[] players) 
-            : this(id, gameStatus, board, players, 0)
-        {
-        }
 
         private GameState(int id, GameStatus gameStatus, char[][] board, Player[] players, int nextPlayerIndex)
         {
@@ -36,6 +30,11 @@ namespace YourMoveApp.commons.model
             this._board = board;
             this.Players = players;
             this._nextPlayerIndex = nextPlayerIndex;
+        }
+
+        public GameState(int id, GameStatus gameStatus, char[][] board, Player[] players) 
+            : this(id, gameStatus, board, players, 0)
+        {
         }
 
         public void AdvancePlayer()
