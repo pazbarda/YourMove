@@ -8,12 +8,12 @@ namespace YourMoveApp.commons.model
 {
     public class Move
     {
-        int GameId { get; }
-        int X { get; }
-        int Y { get; }
-        char GameCharacter { get; }
+        public String GameId { get; }
+        public int X { get; }
+        public int Y { get; }
+        public char GameCharacter { get; }
 
-        public Move(int gameId, int x, int y, char gameCharacter)
+        public Move(String gameId, int x, int y, char gameCharacter)
         {
             this.GameId = gameId;
             this.X = x;
