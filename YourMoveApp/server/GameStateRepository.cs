@@ -10,7 +10,7 @@ namespace YourMoveApp.server
 {
     internal class GameStateRepository : IGameStateRpository
     {
-        Dictionary<String, GameState> _gameIdToGameState = new();
+        private Dictionary<String, GameState> _gameIdToGameState = new();
 
         public String Save(GameState gameState)
         {

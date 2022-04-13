@@ -8,10 +8,10 @@ namespace YourMoveApp.commons.model
 {
     public class Player
     {
-        private int Id { get; set; }
+        private String Id { get; set; }
         private char GameCharacter { get; set; }
 
-        public Player(int id, char gameCharacter)
+        public Player(String id, char gameCharacter)
         {
             this.Id = id;
             this.GameCharacter = gameCharacter;

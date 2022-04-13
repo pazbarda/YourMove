@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YourMoveApp.commons.util;
 
 namespace YourMoveApp.commons.model
 {
@@ -14,7 +15,7 @@ namespace YourMoveApp.commons.model
         public char[][] Board {
             get { return this._board; } 
         }
-        public Player[] Players { get; }
+        public List<Player> Players { get; }
         public Player NextPlayer
         {
             get { return Players[_nextPlayerIndex]; }
@@ -23,7 +24,7 @@ namespace YourMoveApp.commons.model
         private char[][] _board;
         private int _nextPlayerIndex;
 
-        private GameState(int id, GameStatus gameStatus, char[][] board, Player[] players, int nextPlayerIndex)
+        private GameState(int id, GameStatus gameStatus, char[][] board, List<Player> players, int nextPlayerIndex)
         {
             this.Id = id;
             this.GameStatus = gameStatus;
@@ -32,14 +33,14 @@ namespace YourMoveApp.commons.model
             this._nextPlayerIndex = nextPlayerIndex;
         }
 
-        public GameState(int id, GameStatus gameStatus, char[][] board, Player[] players) 
-            : this(id, gameStatus, board, players, 0)
+        public GameState(GameStatus gameStatus, char[][] board, List<Player> players) 
+            : this(0, gameStatus, board, players, 0)
         {
         }
 
         public void AdvancePlayer()
         {
-            if (_nextPlayerIndex == Players.Length - 1)
+            if (_nextPlayerIndex == Players.Count - 1)
             {
                 _nextPlayerIndex = 0;
             } else
@@ -55,16 +56,15 @@ namespace YourMoveApp.commons.model
             private readonly int _id;
             private readonly GameStatus _gameStatus;
             private char[][] _board;
-            private readonly Player[] _players;
-            private int _nextPlayerIndex;
+            private readonly List<Player> _players;
+            private readonly int _nextPlayerIndex;
 
             public Cloner(GameState gameState)
             {
                 this._id = gameState.Id;
                 this._gameStatus = gameState.GameStatus;
                 this._board = gameState.Board;
-                this._players = new Player[gameState.Players.Length];
-                Array.Copy(gameState.Players, this._players, gameState.Players.Length);
+                this._players = ObjectUtil.CloneList(gameState.Players);
                 this._nextPlayerIndex = gameState._nextPlayerIndex;
             }
 
