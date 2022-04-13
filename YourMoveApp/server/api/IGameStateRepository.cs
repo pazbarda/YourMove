@@ -7,7 +7,7 @@ using YourMoveApp.commons.model;
 
 namespace YourMoveApp.server.api
 {
-    internal interface IGameStateRpository
+    internal interface IGameStateRepository
     {
         public String Save(GameState gameState);
 

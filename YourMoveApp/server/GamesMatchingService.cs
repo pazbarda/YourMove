@@ -11,9 +11,9 @@ namespace YourMoveApp.server
     internal class GamesMatchingService : IGamesMatchingService
     {
         private readonly HashSet<String> _unmatchedGameIds = new();
-        private readonly IGameStateRpository _gameStateRepository;
+        private readonly IGameStateRepository _gameStateRepository;
 
-        public GamesMatchingService(IGameStateRpository gameStateRpository)
+        public GamesMatchingService(IGameStateRepository gameStateRpository)
         {
             this._gameStateRepository = gameStateRpository;
         }

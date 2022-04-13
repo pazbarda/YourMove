@@ -8,7 +8,7 @@ using YourMoveApp.server.api;
 
 namespace YourMoveApp.server
 {
-    internal class GameStateRepository : IGameStateRpository
+    internal class GameStateRepository : IGameStateRepository
     {
         private Dictionary<String, GameState> _gameIdToGameState = new();
 
@@ -21,7 +21,7 @@ namespace YourMoveApp.server
 
         public GameState Update(String gameId, GameState gameState)
         {
-            _gameIdToGameState.Add(gameId, gameState);
+            _gameIdToGameState[gameId] = gameState;
             return _gameIdToGameState[gameId];
         }
 

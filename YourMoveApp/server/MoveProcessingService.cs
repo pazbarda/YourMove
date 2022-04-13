@@ -10,9 +10,9 @@ namespace YourMoveApp.server
 {
     internal class MoveProcessingService : IMoveProcessingService
     {
-        private readonly IGameStateRpository _gameStateRepository;
+        private readonly IGameStateRepository _gameStateRepository;
 
-        public MoveProcessingService(IGameStateRpository gameStateRpository)
+        public MoveProcessingService(IGameStateRepository gameStateRpository)
         {
             this._gameStateRepository = gameStateRpository;
         }
