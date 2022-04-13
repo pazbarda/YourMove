@@ -29,8 +29,8 @@ namespace YourMoveApp.server
 
         public List<GameState> GetUnmatchedGames()
         {
-            List<GameState> unmatchedGameStates = new();
             List<String> sortedUmatchedGameIds = GetSortedUmatchedGameIds();
+            List<GameState> unmatchedGameStates = new();
             sortedUmatchedGameIds.ForEach(gameId => {
                 GameState gameState = _gameStateRepository.Find(gameId);
                 if (gameState != null)
