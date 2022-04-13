@@ -12,5 +12,7 @@ namespace YourMoveApp.server.api
         public String CreateNewGame(String initiatingPlayerId);
 
         public List<GameState> GetUnmatchedGames();
+
+        public Action<object> GetAction();
     }
 }

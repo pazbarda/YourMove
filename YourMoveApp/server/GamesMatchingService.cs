@@ -41,6 +41,18 @@ namespace YourMoveApp.server
             return unmatchedGameStates;
         }
 
+        public Action<object> GetAction()
+        {
+            return Callback;
+        }
+
+
+
+        public void Callback(object obj)
+        {
+            System.Console.WriteLine("This Is a Callback!!! -- " + obj.ToString());
+        }
+
         private static char[][] CreateCleanBoard()
         {
             char[][] board = new char[3][];
