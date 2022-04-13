@@ -2,11 +2,15 @@
 using YourMoveApp.server.api;
 using YourMoveApp.commons.model;
 
-IGameStateRpository gameStateRpository = new GameStateRepository();
+IGameStateRepository gameStateRpository = new GameStateRepository();
 IGamesMatchingService gamesMatchingService = new GamesMatchingService(gameStateRpository);
 IMoveProcessingService moveProcessingService = new MoveProcessingService(gameStateRpository);
+INotificationService notificationService = new NotificationService();
 
 String gameId = gamesMatchingService.CreateNewGame("player-0");
 
 moveProcessingService.processMove(new Move(gameId, 0, 1, 'X'));
 
+Action<object> callback = gamesMatchingService.GetAction();
+notificationService.Register(EventType.GAME_STATE_CHANGE, callback);
+notificationService.Notify(EventType.GAME_STATE_CHANGE, gameStateRpository.Find(gameId));
