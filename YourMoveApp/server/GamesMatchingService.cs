@@ -41,6 +41,24 @@ namespace YourMoveApp.server
             return unmatchedGameStates;
         }
 
+        public GenericResponse JoinGame(JoinGameRequest joinGameRequest)
+        {
+            String gameId = joinGameRequest.GameId;
+            if (!_unmatchedGameIds.Contains(gameId))
+            {
+                return new GenericResponse(false, "no unmatched game found with id " + gameId + ", might already be matched");
+            }
+            _unmatchedGameIds.Remove(gameId);
+            GameState gameState = _gameStateRepository.Find(gameId);
+            if (null == gameState)
+            {
+                return new GenericResponse(false, "no game found with id " + gameId);
+            }
+            Player newPlayer = new(joinGameRequest.UserId, 'O');
+            GameState newGameState = updateAndGetGameState(gameState, newPlayer);
+            return new GenericResponse(true, "user " + newPlayer.UserId + " joined game " + gameId + " as " + newPlayer.GameCharacter);
+        }
+
         private static char[][] CreateCleanBoard()
         {
             char[][] board = new char[3][];
@@ -56,6 +74,14 @@ namespace YourMoveApp.server
             List<String> sortedUmatchedGameIds = _unmatchedGameIds.ToList();
             sortedUmatchedGameIds.Sort();
             return sortedUmatchedGameIds;
+        }
+
+        private GameState updateAndGetGameState(GameState oldGameState, Player newPlayer)
+        {
+            GameState newGameState = new GameState.Cloner(oldGameState).Clone();
+            newGameState.AddPlayer(newPlayer);
+            newGameState.GameStatus = GameStatus.ONGOING;
+            return _gameStateRepository.Update(oldGameState.Id, newGameState);
         }
     }
 }

@@ -8,12 +8,12 @@ namespace YourMoveApp.commons.model
 {
     public class Player
     {
-        private String Id { get; set; }
-        private char GameCharacter { get; set; }
+        public String UserId { get; set; }
+        public char GameCharacter { get; set; }
 
         public Player(String id, char gameCharacter)
         {
-            this.Id = id;
+            this.UserId = id;
             this.GameCharacter = gameCharacter;
         }
     }

@@ -9,8 +9,8 @@ namespace YourMoveApp.commons.model
 {
     public class GameState
     {
-        public int Id { get; }
-        public GameStatus GameStatus { get; }
+        public String Id { get; }
+        public GameStatus GameStatus { get; set; }
 
         public char[][] Board {
             get { return this._board; } 
@@ -24,7 +24,7 @@ namespace YourMoveApp.commons.model
         private char[][] _board;
         private int _nextPlayerIndex;
 
-        private GameState(int id, GameStatus gameStatus, char[][] board, List<Player> players, int nextPlayerIndex)
+        private GameState(String id, GameStatus gameStatus, char[][] board, List<Player> players, int nextPlayerIndex)
         {
             this.Id = id;
             this.GameStatus = gameStatus;
@@ -34,7 +34,7 @@ namespace YourMoveApp.commons.model
         }
 
         public GameState(GameStatus gameStatus, char[][] board, List<Player> players) 
-            : this(0, gameStatus, board, players, 0)
+            : this(String.Empty, gameStatus, board, players, 0)
         {
         }
 
@@ -49,11 +49,16 @@ namespace YourMoveApp.commons.model
             }
         }
 
+        public void AddPlayer(Player player)
+        {
+            Players.Add(player);
+        }
+
         public class Cloner
         {
             // private readonly GameState _gameState;
 
-            private readonly int _id;
+            private readonly String _id;
             private readonly GameStatus _gameStatus;
             private char[][] _board;
             private readonly List<Player> _players;
