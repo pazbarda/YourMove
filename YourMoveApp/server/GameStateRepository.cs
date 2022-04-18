@@ -14,9 +14,8 @@ namespace YourMoveApp.server
 
         public String Save(GameState gameState)
         {
-            String newGameId = Guid.NewGuid().ToString("N");
-            _gameIdToGameState.Add(newGameId, gameState);
-            return newGameId;
+            _gameIdToGameState.Add(gameState.Id, gameState);
+            return gameState.Id;
         }
 
         public GameState Update(String gameId, GameState gameState)

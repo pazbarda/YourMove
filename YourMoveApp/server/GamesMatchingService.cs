@@ -11,11 +11,14 @@ namespace YourMoveApp.server
     internal class GamesMatchingService : IGamesMatchingService
     {
         private readonly HashSet<String> _unmatchedGameIds = new();
-        private readonly IGameStateRepository _gameStateRepository;
 
-        public GamesMatchingService(IGameStateRepository gameStateRpository)
+        private readonly IGameStateRepository _gameStateRepository;
+        private readonly INotificationService _notificationService;
+
+        public GamesMatchingService(IGameStateRepository gameStateRpository, INotificationService notificationService)
         {
             this._gameStateRepository = gameStateRpository;
+            this._notificationService = notificationService;
         }
 
         public string CreateNewGame(string initiatingPlayerId)
@@ -56,7 +59,8 @@ namespace YourMoveApp.server
             }
             Player newPlayer = new(joinGameRequest.UserId, 'O');
             GameState newGameState = updateAndGetGameState(gameState, newPlayer);
-            return new GenericResponse(true, "user " + newPlayer.UserId + " joined game " + gameId + " as " + newPlayer.GameCharacter);
+            _notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
+            return new GenericResponse(true, "user " + newPlayer.UserId + " joined game " + newGameState.Id + " as " + newPlayer.GameCharacter);
         }
 
         private static char[][] CreateCleanBoard()

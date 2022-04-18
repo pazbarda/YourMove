@@ -9,7 +9,7 @@ namespace YourMoveApp.commons.model
 {
     public class GameState
     {
-        public String Id { get; }
+        public String Id { get; set; }
         public GameStatus GameStatus { get; set; }
 
         public char[][] Board {
@@ -34,7 +34,7 @@ namespace YourMoveApp.commons.model
         }
 
         public GameState(GameStatus gameStatus, char[][] board, List<Player> players) 
-            : this(String.Empty, gameStatus, board, players, 0)
+            : this(Guid.NewGuid().ToString("N"), gameStatus, board, players, 0)
         {
         }
 

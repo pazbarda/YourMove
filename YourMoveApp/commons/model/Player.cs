@@ -11,13 +11,13 @@ namespace YourMoveApp.commons.model
         public String UserId { get; set; }
         public char GameCharacter { get; set; }
 
-        public Player(String id, char gameCharacter)
+        public Player(String UserId, char gameCharacter)
         {
-            this.UserId = id;
+            this.UserId = UserId;
             this.GameCharacter = gameCharacter;
         }
 
-        private Player(Player player) : this(player.Id, player.GameCharacter)
+        private Player(Player player) : this(player.UserId, player.GameCharacter)
         {}
 
         public Object Clone()
