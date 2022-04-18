@@ -12,10 +12,10 @@ namespace YourMoveApp.server
     {
         private readonly HashSet<String> _unmatchedGameIds = new();
 
-        private readonly IGameStateRepository _gameStateRepository;
+        private readonly IRepository<GameState> _gameStateRepository;
         private readonly INotificationService _notificationService;
 
-        public GamesMatchingService(IGameStateRepository gameStateRpository, INotificationService notificationService)
+        public GamesMatchingService(IRepository<GameState> gameStateRpository, INotificationService notificationService)
         {
             this._gameStateRepository = gameStateRpository;
             this._notificationService = notificationService;

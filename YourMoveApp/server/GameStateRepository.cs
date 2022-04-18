@@ -8,7 +8,7 @@ using YourMoveApp.server.api;
 
 namespace YourMoveApp.server
 {
-    internal class GameStateRepository : IGameStateRepository
+    internal class GameStateRepository : IRepository<GameState>
     {
         private Dictionary<String, GameState> _gameIdToGameState = new();
 
