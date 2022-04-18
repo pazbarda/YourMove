@@ -12,7 +12,7 @@ namespace YourMoveApp.server.api
 
         public T Update(String id, T item);
 
-        public void Delete(String item);
+        public void Delete(String id);
 
         public T Find(String id);
 

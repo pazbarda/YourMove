@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using YourMoveApp.commons.model;
 using YourMoveApp.server.api;
+using YourMoveApp.server.api.repositories;
 
 namespace YourMoveApp.server
 {
-    internal class GameStateRepository : IRepository<GameState>
+    internal class GameStateRepository : IGameStateRepository
     {
         private Dictionary<String, GameState> _gameIdToGameState = new();
 

@@ -9,7 +9,7 @@ namespace YourMoveApp.commons.model
 {
     public class GameState
     {
-        public String Id { get; set; }
+        public String Id { get; }
         public GameStatus GameStatus { get; set; }
 
         public char[][] Board {
