@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using YourMoveApp.commons.model;
 using YourMoveApp.server.api;
+using YourMoveApp.server.api.repositories;
 
 namespace YourMoveApp.server
 {
     internal class MoveProcessingService : IMoveProcessingService
     {
-        private readonly IRepository<GameState> _gameStateRepository;
+        private readonly IGameStateRepository _gameStateRepository;
+        private readonly INotificationService notificationService;
 
-        public MoveProcessingService(IRepository<GameState> gameStateRpository)
+        public MoveProcessingService(IGameStateRepository gameStateRepository, INotificationService notificationService)
         {
-            this._gameStateRepository = gameStateRpository;
+            this._gameStateRepository = gameStateRepository;
+            this.notificationService = notificationService;
         }
 
         public void processMove(Move move)
@@ -26,7 +29,9 @@ namespace YourMoveApp.server
             GameState newGameState = new GameState.Cloner(gameState)
                 .With(updatedBoard)
                 .Clone();
+            newGameState.AdvancePlayer();
             _gameStateRepository.Update(move.GameId, newGameState);
+            notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
         }
 
         private static void ValidateMove(Move move)

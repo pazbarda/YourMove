@@ -21,6 +21,7 @@ namespace YourMoveApp.server
         {
             this._messageRepository = messageRepository;
             this._notificationService = notificationService;
+            RegisterToNotifications();
         }
 
         public List<Message> GetAllMessagesForUser(string userId)
@@ -61,6 +62,7 @@ namespace YourMoveApp.server
                         "It's your turn to play!",
                         gameState
                     );
+                Send(messageInput);
             }
 
         }
