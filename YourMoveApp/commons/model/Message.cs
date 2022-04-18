@@ -26,9 +26,9 @@ namespace YourMoveApp.commons.model
 
         bool _isRead;
 
-        public Message(string id, string recepientId, string title, string text, object attachement)
+        public Message(string recepientId, string title, string text, object attachement)
         {
-            this.Id = id;
+            this.Id = Guid.NewGuid().ToString("N");
             this.RecepientId = recepientId;
             this.Title = title;
             this.Text = text;
