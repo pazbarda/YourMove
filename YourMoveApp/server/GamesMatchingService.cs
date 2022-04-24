@@ -13,18 +13,20 @@ namespace YourMoveApp.server
         private readonly HashSet<String> _unmatchedGameIds = new();
 
         private readonly IRepository<GameState> _gameStateRepository;
+        private readonly IGamePluginProvider _gamePluginProvider;
         private readonly INotificationService _notificationService;
 
-        public GamesMatchingService(IRepository<GameState> gameStateRpository, INotificationService notificationService)
+        public GamesMatchingService(IRepository<GameState> gameStateRepository, IGamePluginProvider gamePluginProvider, INotificationService notificationService)
         {
-            this._gameStateRepository = gameStateRpository;
+            this._gameStateRepository = gameStateRepository;
+            this._gamePluginProvider = gamePluginProvider;
             this._notificationService = notificationService;
         }
 
-        public string CreateNewGame(string initiatingPlayerId)
+        public string CreateNewGame(CreateGameRequest createGameRequest)
         {
-            Player initiatingPlayer = new(initiatingPlayerId, 'X');
-            GameState gameState = new(GameStatus.UMATCHED, CreateCleanBoard(), new List<Player> { initiatingPlayer });
+            GameState gameState = _gamePluginProvider.GetGamePlugin(createGameRequest.GameType).CreateGame(createGameRequest.UserId);
+            gameState.GameStatus = GameStatus.UMATCHED;
             String newGameId = _gameStateRepository.Save(gameState);
             _unmatchedGameIds.Add(newGameId);
             return newGameId;
@@ -46,6 +48,7 @@ namespace YourMoveApp.server
 
         public GenericResponse JoinGame(JoinGameRequest joinGameRequest)
         {
+            // TODO PB -- clean this method, use exception catching for fail flows instead of if/else
             String gameId = joinGameRequest.GameId;
             if (!_unmatchedGameIds.Contains(gameId))
             {
@@ -57,20 +60,11 @@ namespace YourMoveApp.server
             {
                 return new GenericResponse(false, "no game found with id " + gameId);
             }
-            Player newPlayer = new(joinGameRequest.UserId, 'O');
-            GameState newGameState = updateAndGetGameState(gameState, newPlayer);
+            GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).JoinGame(gameId, gameState);
+            newGameState.GameStatus = GameStatus.ONGOING;
+            _gameStateRepository.Update(gameId, newGameState);
             _notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
-            return new GenericResponse(true, "user " + newPlayer.UserId + " joined game " + newGameState.Id + " as " + newPlayer.GameCharacter);
-        }
-
-        private static char[][] CreateCleanBoard()
-        {
-            char[][] board = new char[3][];
-            for (int i = 0; i < board.Length; i++)
-            {
-                board[i] = new char[3];
-            }
-            return board;
+            return new GenericResponse(true, "user " + joinGameRequest.UserId + " joined game " + newGameState.Id);
         }
 
         private List<String> GetSortedUmatchedGameIds()
@@ -78,14 +72,6 @@ namespace YourMoveApp.server
             List<String> sortedUmatchedGameIds = _unmatchedGameIds.ToList();
             sortedUmatchedGameIds.Sort();
             return sortedUmatchedGameIds;
-        }
-
-        private GameState updateAndGetGameState(GameState oldGameState, Player newPlayer)
-        {
-            GameState newGameState = new GameState.Cloner(oldGameState).Clone();
-            newGameState.AddPlayer(newPlayer);
-            newGameState.GameStatus = GameStatus.ONGOING;
-            return _gameStateRepository.Update(oldGameState.Id, newGameState);
         }
     }
 }

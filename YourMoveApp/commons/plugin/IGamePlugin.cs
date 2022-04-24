@@ -9,8 +9,12 @@ namespace YourMoveApp.commons.plugin
 {
     public interface IGamePlugin
     {
-        public Func<Move, GameState, GameState> GetMoveProcessor();
+        public GameState CreateGame(String initiatingPlayerId);
 
-        public Func<Move, GameState, GenericResponse> ValidateMove();
+        public GameState JoinGame(String joiningPlayerId, GameState gameState);
+
+        public GameState ProcessMove(Move move, GameState gameState);
+
+        public GenericResponse ValidateMove(Move move, GameState gameState);
     }
 }

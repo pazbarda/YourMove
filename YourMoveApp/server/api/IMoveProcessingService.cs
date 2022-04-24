@@ -9,6 +9,6 @@ namespace YourMoveApp.server.api
 {
     internal interface IMoveProcessingService
     {
-        public void processMove(Move move);
+        public void ProcessMove(Move move);
     }
 }

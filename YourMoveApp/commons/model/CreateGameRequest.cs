@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.commons.model
 {
-    public class JoinGameRequest
+    internal class CreateGameRequest
     {
         public string UserId { get; }
-        public string GameId { get; }
+        public GameType GameType { get; }
 
-        public JoinGameRequest(String userId, String gameId)
+        public CreateGameRequest(String userId, GameType gameType)
         {
             this.UserId = userId;
-            this.GameId = gameId;
+            this.GameType = gameType;
         }
     }
 }

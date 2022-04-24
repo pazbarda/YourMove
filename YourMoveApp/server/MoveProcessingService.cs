@@ -12,21 +12,21 @@ namespace YourMoveApp.server
     internal class MoveProcessingService : IMoveProcessingService
     {
         private readonly IGameStateRepository _gameStateRepository;
-        private readonly INotificationService _notificationService;
         private readonly IGamePluginProvider _gamePluginProvider;
+        private readonly INotificationService _notificationService;
 
-        public MoveProcessingService(IGameStateRepository gameStateRepository, INotificationService notificationService, IGamePluginProvider gamePluginProvider)
+        public MoveProcessingService(IGameStateRepository gameStateRepository, IGamePluginProvider gamePluginProvider, INotificationService notificationService)
         {
             this._gameStateRepository = gameStateRepository;
-            this._notificationService = notificationService;
             this._gamePluginProvider = gamePluginProvider;
+            this._notificationService = notificationService;
         }
 
-        public void processMove(Move move)
+        public void ProcessMove(Move move)
         {
             ValidateMove(move);
-            GameState gameState = getValidatedGameState(move.GameId);
-            GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).GetMoveProcessor().Invoke(move, gameState);
+            GameState gameState = GetValidatedGameState(move.GameId);
+            GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).ProcessMove(move, gameState);
             _gameStateRepository.Update(move.GameId, newGameState);
             _notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
         }
@@ -45,7 +45,7 @@ namespace YourMoveApp.server
             }
         }
 
-        private GameState getValidatedGameState(String gameId)
+        private GameState GetValidatedGameState(String gameId)
         {
             GameState gameState = _gameStateRepository.Find(gameId);
             ValidateNotNull(gameState);

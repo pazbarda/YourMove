@@ -9,7 +9,7 @@ namespace YourMoveApp.server.api
 {
     internal interface IGamesMatchingService
     {
-        public String CreateNewGame(String initiatingPlayerId);
+        public String CreateNewGame(CreateGameRequest createGameRequest);
 
         public List<GameState> GetUnmatchedGames();
 

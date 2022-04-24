@@ -33,8 +33,8 @@ namespace YourMoveApp.commons.model
             this._nextPlayerIndex = nextPlayerIndex;
         }
 
-        public GameState(GameStatus gameStatus, char[][] board, List<Player> players) 
-            : this(Guid.NewGuid().ToString("N"), gameStatus, board, players, 0)
+        public GameState(char[][] board, List<Player> players) 
+            : this(Guid.NewGuid().ToString("N"), GameStatus.UMATCHED, board, players, 0)
         {
         }
 
