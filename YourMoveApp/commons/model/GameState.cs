@@ -10,8 +10,8 @@ namespace YourMoveApp.commons.model
     public class GameState
     {
         public String Id { get; }
+        public GameType GameType { get; }
         public GameStatus GameStatus { get; set; }
-
         public char[][] Board {
             get { return this._board; } 
         }

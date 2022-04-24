@@ -12,26 +12,23 @@ namespace YourMoveApp.server
     internal class MoveProcessingService : IMoveProcessingService
     {
         private readonly IGameStateRepository _gameStateRepository;
-        private readonly INotificationService notificationService;
+        private readonly INotificationService _notificationService;
+        private readonly IGamePluginProvider _gamePluginProvider;
 
-        public MoveProcessingService(IGameStateRepository gameStateRepository, INotificationService notificationService)
+        public MoveProcessingService(IGameStateRepository gameStateRepository, INotificationService notificationService, IGamePluginProvider gamePluginProvider)
         {
             this._gameStateRepository = gameStateRepository;
-            this.notificationService = notificationService;
+            this._notificationService = notificationService;
+            this._gamePluginProvider = gamePluginProvider;
         }
 
         public void processMove(Move move)
         {
             ValidateMove(move);
-            GameState gameState = _gameStateRepository.Find(move.GameId);
-            ValidateNotNull(gameState);
-            char[][] updatedBoard = UpdateBoard(gameState.Board, move);
-            GameState newGameState = new GameState.Cloner(gameState)
-                .With(updatedBoard)
-                .Clone();
-            newGameState.AdvancePlayer();
+            GameState gameState = getValidatedGameState(move.GameId);
+            GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).GetMoveProcessor().Invoke(move, gameState);
             _gameStateRepository.Update(move.GameId, newGameState);
-            notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
+            _notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
         }
 
         private static void ValidateMove(Move move)
@@ -48,10 +45,11 @@ namespace YourMoveApp.server
             }
         }
 
-        private static char[][] UpdateBoard(char[][] board, Move move)
+        private GameState getValidatedGameState(String gameId)
         {
-            board[move.Y][move.X] = move.GameCharacter;
-            return board;
+            GameState gameState = _gameStateRepository.Find(gameId);
+            ValidateNotNull(gameState);
+            return gameState;
         }
     }
 }

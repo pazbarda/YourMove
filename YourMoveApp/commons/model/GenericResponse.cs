@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.commons.model
 {
-    internal class GenericResponse
+    public class GenericResponse
     {
         public Boolean Success { get; }
          public String Message { get; }
