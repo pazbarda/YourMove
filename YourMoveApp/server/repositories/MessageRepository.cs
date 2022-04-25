@@ -23,7 +23,7 @@ namespace YourMoveApp.server
             }
         }
 
-        public Message Find(string messageId)
+        public Message FindOrThrowException(string messageId)
         {
             return _messageIdToMessage[messageId];
         }
@@ -36,10 +36,13 @@ namespace YourMoveApp.server
                 List<string> userMessageIds = _userIdToMessageIds[userId];
                 foreach (string messageId in userMessageIds)
                 {
-                    Message message = Find(messageId);
-                    if (null!=message)
+                    try
                     {
-                        messages.Add(message);
+                        messages.Add(FindOrThrowException(messageId));
+                    }
+                    catch (Exception ex)
+                    {
+                        // TODO PB -- log warning with exception message
                     }
                 }
             }
@@ -64,10 +67,13 @@ namespace YourMoveApp.server
             List<Message> result = new List<Message>();
             foreach (String messageId in messageIds)
             {
-                Message message = Find(messageId);
-                if (message != null)
+                try
                 {
-                    result.Add(message);
+                    result.Add(FindOrThrowException(messageId));
+                }
+                catch (Exception ex)
+                {
+                    // TODO PB -- log warning with exception message
                 }
             }
             return result;
@@ -83,7 +89,7 @@ namespace YourMoveApp.server
             return messageId;
         }
 
-        public Message Update(string messageId, Message message)
+        public Message UpdateOrThrowException(string messageId, Message message)
         {
             _messageIdToMessage[messageId] = message;
             return _messageIdToMessage[messageId];

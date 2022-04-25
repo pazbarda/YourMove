@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YourMoveApp.commons.model;
 using YourMoveApp.server.api;
+using YourMoveApp.server.api.exceptions;
 
 namespace YourMoveApp.server
 {
@@ -37,10 +38,13 @@ namespace YourMoveApp.server
             List<String> sortedUmatchedGameIds = GetSortedUmatchedGameIds();
             List<GameState> unmatchedGameStates = new();
             sortedUmatchedGameIds.ForEach(gameId => {
-                GameState gameState = _gameStateRepository.Find(gameId);
-                if (gameState != null)
+                try
                 {
-                    unmatchedGameStates.Add(gameState);
+                    unmatchedGameStates.Add(_gameStateRepository.FindOrThrowException(gameId));
+                }
+                catch (Exception ex)
+                {
+                    // TODO PB -- log warning with exception message
                 }
             });
             return unmatchedGameStates;
@@ -48,23 +52,14 @@ namespace YourMoveApp.server
 
         public GenericResponse JoinGame(JoinGameRequest joinGameRequest)
         {
-            // TODO PB -- clean this method, use exception catching for fail flows instead of if/else
-            String gameId = joinGameRequest.GameId;
-            if (!_unmatchedGameIds.Contains(gameId))
+            try
             {
-                return new GenericResponse(false, "no unmatched game found with id " + gameId + ", might already be matched");
+                return JoinGameOrThrowException(joinGameRequest);
             }
-            _unmatchedGameIds.Remove(gameId);
-            GameState gameState = _gameStateRepository.Find(gameId);
-            if (null == gameState)
+            catch (ItemNotFoundException ex)
             {
-                return new GenericResponse(false, "no game found with id " + gameId);
+                return new GenericResponse(false, ex.Message);
             }
-            GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).JoinGame(gameId, gameState);
-            newGameState.GameStatus = GameStatus.ONGOING;
-            _gameStateRepository.Update(gameId, newGameState);
-            _notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
-            return new GenericResponse(true, "user " + joinGameRequest.UserId + " joined game " + newGameState.Id);
         }
 
         private List<String> GetSortedUmatchedGameIds()
@@ -72,6 +67,32 @@ namespace YourMoveApp.server
             List<String> sortedUmatchedGameIds = _unmatchedGameIds.ToList();
             sortedUmatchedGameIds.Sort();
             return sortedUmatchedGameIds;
+        }
+
+        private GenericResponse JoinGameOrThrowException(JoinGameRequest joinGameRequest)
+        {
+            String gameId = joinGameRequest.GameId;
+            GameState gameState = GetUmatchedGameStateOrThrowException(gameId);
+            GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).JoinGame(gameId, gameState);
+            newGameState.GameStatus = GameStatus.ONGOING;
+            _gameStateRepository.UpdateOrThrowException(gameId, newGameState);
+            _notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
+            return new GenericResponse(true, "user " + joinGameRequest.UserId + " joined game " + newGameState.Id);
+        }
+
+        private GameState GetUmatchedGameStateOrThrowException(string gameId)
+        {
+            ValidateUnmatchedGameExistsOrThrowException(gameId);
+            _unmatchedGameIds.Remove(gameId);
+            return _gameStateRepository.FindOrThrowException(gameId);
+        }
+
+        private void ValidateUnmatchedGameExistsOrThrowException(string gameId)
+        {
+            if (!_unmatchedGameIds.Contains(gameId))
+            {
+                throw new ItemNotFoundException("no unmatched game found with id " + gameId + ", might already be matched");
+            }
         }
     }
 }

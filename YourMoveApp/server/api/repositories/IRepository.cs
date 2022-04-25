@@ -10,11 +10,11 @@ namespace YourMoveApp.server.api
     {
         public String Save(T item);
 
-        public T Update(String id, T item);
+        public T UpdateOrThrowException(String id, T item);
 
         public void Delete(String id);
 
-        public T Find(String id);
+        public T FindOrThrowException(String id);
 
         public List<T> FindMultiple(List<String> ids);
     }

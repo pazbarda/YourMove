@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YourMoveApp.commons.model;
 using YourMoveApp.server.api;
+using YourMoveApp.server.api.exceptions;
 using YourMoveApp.server.api.repositories;
 
 namespace YourMoveApp.server
@@ -19,19 +20,22 @@ namespace YourMoveApp.server
             return gameState.Id;
         }
 
-        public GameState Update(String gameId, GameState gameState)
+        public GameState UpdateOrThrowException(String gameId, GameState gameState)
         {
+            ValidateGameSavedOrThrowException(gameId);
             _gameIdToGameState[gameId] = gameState;
             return _gameIdToGameState[gameId];
         }
 
         public void Delete(String gameId)
         {
+            ValidateGameSavedOrThrowException(gameId);
             _gameIdToGameState.Remove(gameId);
         }
 
-        public GameState Find(String gameId)
+        public GameState FindOrThrowException(String gameId)
         {
+            ValidateGameSavedOrThrowException(gameId);
             return _gameIdToGameState[gameId];
         }
 
@@ -40,13 +44,24 @@ namespace YourMoveApp.server
             List<GameState> result = new List<GameState>();
             foreach (String gameId in gameIds)
             {
-                GameState gameState = Find(gameId);
-                if (gameState != null)
+                try
                 {
-                    result.Add(gameState);
+                    result.Add(FindOrThrowException(gameId));
+                }
+                catch (Exception ex)
+                {
+                    // TODO PB - log warning with exception message
                 }
             }
             return result;
+        }
+
+        private void ValidateGameSavedOrThrowException(String gameId)
+        {
+            if (!_gameIdToGameState.ContainsKey(gameId))
+            {
+                throw new ItemNotFoundException("no game saved with id=" + gameId);
+            }
         }
     }
 }

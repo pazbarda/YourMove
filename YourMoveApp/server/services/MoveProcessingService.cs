@@ -22,22 +22,35 @@ namespace YourMoveApp.server
             this._notificationService = notificationService;
         }
 
-        public void ProcessMove(Move move)
+        public GenericResponse ProcessMove(Move move)
         {
-            ValidateMove(move);
-            GameState gameState = GetValidatedGameState(move.GameId);
+            try
+            {
+                ProcessMoveOrThrowException(move);
+                return new GenericResponse(true, "move processed successfully");
+            }
+            catch (Exception ex)
+            {
+                return new GenericResponse(false, ex.Message);
+            }
+        }
+
+        private void ProcessMoveOrThrowException(Move move)
+        {
+            ValidateMoveOrThrowException(move);
+            GameState gameState = GetGameStateOrThrowException(move.GameId);
             GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).ProcessMove(move, gameState);
-            _gameStateRepository.Update(move.GameId, newGameState);
+            _gameStateRepository.UpdateOrThrowException(move.GameId, newGameState);
             _notificationService.Notify(EventType.GAME_STATE_CHANGE, newGameState);
         }
 
-        private static void ValidateMove(Move move)
+        private static void ValidateMoveOrThrowException(Move move)
         {
-            ValidateNotNull(move);
-            ValidateNotNull(move.GameId);
+            ValidateNotNullOrThrowException(move);
+            ValidateNotNullOrThrowException(move.GameId);
         }
 
-        private static void ValidateNotNull(Object obj)
+        private static void ValidateNotNullOrThrowException(Object obj)
         {
             if (obj == null)
             {
@@ -45,10 +58,10 @@ namespace YourMoveApp.server
             }
         }
 
-        private GameState GetValidatedGameState(String gameId)
+        private GameState GetGameStateOrThrowException(String gameId)
         {
-            GameState gameState = _gameStateRepository.Find(gameId);
-            ValidateNotNull(gameState);
+            GameState gameState = _gameStateRepository.FindOrThrowException(gameId);
+            ValidateNotNullOrThrowException(gameState);
             return gameState;
         }
     }
