@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YourMoveApp.commons.model;
+﻿using YourMoveApp.commons.model;
 using YourMoveApp.server.api;
 using YourMoveApp.server.api.exceptions;
 
+// TODO PB -- unit tests [1]
 namespace YourMoveApp.server
 {
-    internal class GamesMatchingService : IGamesMatchingService
+    public class GamesMatchingService : IGamesMatchingService
     {
-        private readonly HashSet<String> _unmatchedGameIds = new();
+        private readonly HashSet<string> _unmatchedGameIds = new();
 
         private readonly IRepository<GameState> _gameStateRepository;
         private readonly IGamePluginProvider _gamePluginProvider;
@@ -28,14 +24,14 @@ namespace YourMoveApp.server
         {
             GameState gameState = _gamePluginProvider.GetGamePlugin(createGameRequest.GameType).CreateGame(createGameRequest.UserId);
             gameState.GameStatus = GameStatus.UMATCHED;
-            String newGameId = _gameStateRepository.Save(gameState);
+            string newGameId = _gameStateRepository.Save(gameState);
             _unmatchedGameIds.Add(newGameId);
             return newGameId;
         }
 
         public List<GameState> GetUnmatchedGames()
         {
-            List<String> sortedUmatchedGameIds = GetSortedUmatchedGameIds();
+            List<string> sortedUmatchedGameIds = GetSortedUmatchedGameIds();
             List<GameState> unmatchedGameStates = new();
             sortedUmatchedGameIds.ForEach(gameId => {
                 try
@@ -62,16 +58,16 @@ namespace YourMoveApp.server
             }
         }
 
-        private List<String> GetSortedUmatchedGameIds()
+        private List<string> GetSortedUmatchedGameIds()
         {
-            List<String> sortedUmatchedGameIds = _unmatchedGameIds.ToList();
+            List<string> sortedUmatchedGameIds = _unmatchedGameIds.ToList();
             sortedUmatchedGameIds.Sort();
             return sortedUmatchedGameIds;
         }
 
         private GenericResponse JoinGameOrThrowException(JoinGameRequest joinGameRequest)
         {
-            String gameId = joinGameRequest.GameId;
+            string gameId = joinGameRequest.GameId;
             GameState gameState = GetUmatchedGameStateOrThrowException(gameId);
             GameState newGameState = _gamePluginProvider.GetGamePlugin(gameState.GameType).JoinGame(gameId, gameState);
             newGameState.GameStatus = GameStatus.ONGOING;

@@ -7,7 +7,7 @@ using YourMoveApp.commons.model;
 
 namespace YourMoveApp.server.api.repositories
 {
-    internal interface IGameStateRepository : IRepository<GameState>
+    public interface IGameStateRepository : IRepository<GameState>
     {
     }
 }

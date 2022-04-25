@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.server.api
 {
-    internal enum EventType
+    public enum EventType
     {
         GAME_STATE_CHANGE
     }

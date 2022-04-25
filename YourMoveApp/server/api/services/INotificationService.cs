@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.server.api
 {
-    internal interface INotificationService
+    public interface INotificationService
     {
         public void Register(EventType eventType, Action<object> callback);
 

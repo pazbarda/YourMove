@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace YourMoveApp.server.api
+﻿namespace YourMoveApp.server.api
 {
-    internal interface IRepository<T>
+    public interface IRepository<T>
     {
         public String Save(T item);
 

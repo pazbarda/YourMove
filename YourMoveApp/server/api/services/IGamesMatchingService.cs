@@ -7,9 +7,9 @@ using YourMoveApp.commons.model;
 
 namespace YourMoveApp.server.api
 {
-    internal interface IGamesMatchingService
+    public interface IGamesMatchingService
     {
-        public String CreateNewGame(CreateGameRequest createGameRequest);
+        public string CreateNewGame(CreateGameRequest createGameRequest);
 
         public List<GameState> GetUnmatchedGames();
 

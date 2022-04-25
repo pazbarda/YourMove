@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.commons.model
 {
-    internal class CreateGameRequest
+    public class CreateGameRequest
     {
         public string UserId { get; }
         public GameType GameType { get; }

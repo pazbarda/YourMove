@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YourMoveApp.commons.model;
+﻿using YourMoveApp.commons.model;
+using YourMoveApp.commons.util;
+
 
 namespace YourMoveApp.server.plugin.tictactoe
 {
     class TicTacToeGameCreator
     {
-        internal static GameState CreateNewGame(String initiatingPlayerId)
+        internal static GameState CreateNewGame(string initiatingPlayerId)
         {
+            ObjectUtil.ValidateIdOrThrowException(initiatingPlayerId);
             Player initiatingPlayer = new(initiatingPlayerId, 'X');
             return new(CreateCleanBoard(), new List<Player> { initiatingPlayer });
         }

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YourMoveApp.commons.model;
+﻿using YourMoveApp.commons.model;
+using YourMoveApp.commons.util;
 
 namespace YourMoveApp.server.plugin.tictactoe
 {
@@ -11,6 +7,8 @@ namespace YourMoveApp.server.plugin.tictactoe
     {
         internal static GameState JoinGame(string joiningPlayerId, GameState gameState)
         {
+            ObjectUtil.ValidateNotNullOrThrowException(gameState);
+            ObjectUtil.ValidateIdOrThrowException(joiningPlayerId);
             Player newPlayer = new(joiningPlayerId, 'O');
             GameState newGameState = new GameState.Cloner(gameState).Clone();
             newGameState.AddPlayer(newPlayer);

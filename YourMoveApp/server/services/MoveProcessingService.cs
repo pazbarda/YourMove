@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YourMoveApp.commons.model;
+﻿using YourMoveApp.commons.model;
+using YourMoveApp.commons.util;
 using YourMoveApp.server.api;
 using YourMoveApp.server.api.repositories;
 
+// TODO PB -- unit tests [1]
 namespace YourMoveApp.server
 {
     internal class MoveProcessingService : IMoveProcessingService
@@ -46,22 +43,14 @@ namespace YourMoveApp.server
 
         private static void ValidateMoveOrThrowException(Move move)
         {
-            ValidateNotNullOrThrowException(move);
-            ValidateNotNullOrThrowException(move.GameId);
-        }
-
-        private static void ValidateNotNullOrThrowException(Object obj)
-        {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
+            ObjectUtil.ValidateNotNullOrThrowException(move);
+            ObjectUtil.ValidateNotNullOrThrowException(move.GameId);
         }
 
         private GameState GetGameStateOrThrowException(String gameId)
         {
             GameState gameState = _gameStateRepository.FindOrThrowException(gameId);
-            ValidateNotNullOrThrowException(gameState);
+            ObjectUtil.ValidateNotNullOrThrowException(gameState);
             return gameState;
         }
     }

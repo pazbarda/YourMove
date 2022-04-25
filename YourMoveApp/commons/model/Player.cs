@@ -17,12 +17,25 @@ namespace YourMoveApp.commons.model
             this.GameCharacter = gameCharacter;
         }
 
-        private Player(Player player) : this(player.UserId, player.GameCharacter)
-        {}
 
         public Object Clone()
         {
             return new Player(this);
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Player player &&
+                   UserId == player.UserId &&
+                   GameCharacter == player.GameCharacter;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(UserId, GameCharacter);
+        }
+
+        private Player(Player player) : this(player.UserId, player.GameCharacter)
+        {}
     }
 }

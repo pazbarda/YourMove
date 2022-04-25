@@ -7,14 +7,13 @@ using YourMoveApp.commons.model;
 using YourMoveApp.server.api;
 using YourMoveApp.server.api.repositories;
 
-
+// TODO PB -- unit tests [1]
 namespace YourMoveApp.server
 {
     internal class PlayerMessagingService : IPlayerMessagingService
     {
 
         private readonly IMessageRepository _messageRepository;
-        
         private readonly INotificationService _notificationService;
 
         public PlayerMessagingService(IMessageRepository messageRepository, INotificationService notificationService)

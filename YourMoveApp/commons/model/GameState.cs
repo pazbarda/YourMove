@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YourMoveApp.commons.util;
+﻿using YourMoveApp.commons.util;
 
 namespace YourMoveApp.commons.model
 {
     public class GameState
     {
-        public String Id { get; }
+        public string Id { get; }
         public GameType GameType { get; }
         public GameStatus GameStatus { get; set; }
         public char[][] Board {
@@ -54,10 +49,40 @@ namespace YourMoveApp.commons.model
             Players.Add(player);
         }
 
+        public override bool Equals(object? obj)
+        {
+            return obj is GameState state &&
+                   GameType == state.GameType &&
+                    GameStatus == state.GameStatus &&
+                    AreBoardsEqual(state) &&
+                   // EqualityComparer<char[][]>.Default.Equals(Board, state.Board) &&
+                   Players.SequenceEqual(state.Players) &&
+                   // EqualityComparer<List<Player>>.Default.Equals(Players, state.Players) &&
+                   EqualityComparer<Player>.Default.Equals(NextPlayer, state.NextPlayer);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(GameType, GameStatus, Board, Players, NextPlayer);
+        }
+
+        private bool AreBoardsEqual(GameState other)
+        {
+            for (int row=0; row<this._board.Length; row++)
+            {
+                for (int col=0; col<other._board[row].Length; col++)
+                {
+                    if (this._board[row][col] != other._board[row][col])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         public class Cloner
         {
-            // private readonly GameState _gameState;
-
             private readonly String _id;
             private readonly GameStatus _gameStatus;
             private char[][] _board;

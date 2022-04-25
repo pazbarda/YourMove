@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YourMoveApp.commons.model;
+﻿using YourMoveApp.commons.model;
 
 namespace YourMoveApp.server.plugin.tictactoe
 {
     internal class TicTacToeMoveValidator
     {
-        private static readonly char EMPTY_CELL = '\0';
+        internal static readonly char EMPTY_CELL = '\0';
 
         internal static GenericResponse ValidateTicTacToeMove(Move move, GameState gameState)
         {
