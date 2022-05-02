@@ -14,7 +14,7 @@ namespace YourMoveApp.server.plugin.tictactoe
             char[][] updatedBoard = GetUpdatedBoard(move, gameState);
             GameState updatedGameState = new GameState.Cloner(gameState).With(updatedBoard).Clone();
 
-            if (CheckForWin(moveX, moveY, updatedBoard)) {
+            if (CheckForWin(moveX, moveY, updatedBoard).Result) {
                 updatedGameState.GameStatus = GameStatus.WIN;
             }
             else if (CheckForFullyOccupiedBoard(updatedBoard))
@@ -48,12 +48,29 @@ namespace YourMoveApp.server.plugin.tictactoe
             return board;
         }
 
-        private static bool CheckForWin(int moveX, int moveY, char[][] updatedBoard)
+        private static async Task<bool> CheckForWin(int moveX, int moveY, char[][] updatedBoard)
         {
-            return CheckHorizontalForWin(moveX, moveY, updatedBoard) ||
-                CheckVerticalForWin(moveX, moveY, updatedBoard) ||
-                CheckPrimaryDiagnoalForWin(moveX, moveY, updatedBoard) ||
-                CheckSecondaryDiagnoalForWin(moveX, moveY, updatedBoard);
+            List<Func<bool>> inputFuncs = new()
+            {
+                () => CheckHorizontalForWin(moveX, moveY, updatedBoard),
+                () => CheckVerticalForWin(moveX, moveY, updatedBoard),
+                () => CheckPrimaryDiagnoalForWin(moveX, moveY, updatedBoard),
+                () => CheckSecondaryDiagnoalForWin(moveX, moveY, updatedBoard)
+            };
+            bool resultCalculationFunc(List<bool> bools)
+            {
+                foreach (bool b in bools)
+                {
+                    if (b)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+            MultiAsyncCalculator<bool, bool> multiAsyncWinCalculator = new(inputFuncs, resultCalculationFunc);
+            return await multiAsyncWinCalculator.CalculateAsync();
         }
 
         private static bool CheckHorizontalForWin(int moveX, int moveY, char[][] updatedBoard)
