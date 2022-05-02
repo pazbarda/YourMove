@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.commons.util
 {
-    internal class ObjectUtil
+    public class ObjectUtil
     {
         public static void ValidateIdOrThrowException(string id)
         {
