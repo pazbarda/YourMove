@@ -8,7 +8,7 @@ using YourMoveApp.server.api;
 // TODO PB -- unit tests [0]
 namespace YourMoveApp.server
 {
-    internal class NotificationService : INotificationService
+    public class NotificationService : INotificationService
     {
         private readonly Dictionary<EventType, List<Action<object>>> _eventTypeToCallbacksList = new();
 
