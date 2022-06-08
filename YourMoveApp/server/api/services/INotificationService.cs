@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.server.api
 {
+    public delegate void Notification(object payload);
+
     public interface INotificationService
     {
-        public void Register(EventType eventType, Action<object> callback);
+        public void Register(EventType eventType, Notification callback);
 
         public void Notify(EventType eventType, object payload);
     }

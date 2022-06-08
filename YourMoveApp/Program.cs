@@ -21,7 +21,7 @@ messages = playerMessagingService.GetAllUnreadMessagesForUser("player-1");
 moveProcessingService.ProcessMove(new Move(gameId, 1, 1, '0'));
 messages = playerMessagingService.GetAllUnreadMessagesForUser("player-0");*/
 
-
+/*
 List<Func<int>> inputFuncs = new();
 inputFuncs.Add(new Func<int>(() => {
     Task.Delay(1000).Wait();
@@ -49,4 +49,73 @@ Func<List<int>, int> resultCalculationFunc = new Func<List<int>, int>(ints => {
 });
 
 int result = await new MultiAsyncCalculator<int, int>(inputFuncs, resultCalculationFunc).CalculateAsync();
-Console.WriteLine(result);
+Console.WriteLine(result);*/
+
+namespace YourMoveApp
+{
+    /*delegate void Notification(string str);
+
+    class Notifier
+    {
+        private event Notification notificationEvent;
+
+        public void Notify(String message)
+        {
+            if (this.notificationEvent != null)
+            {
+                this.notificationEvent(message);
+            }
+        }
+
+        public void Subscribe(Notification subscriber)
+        {
+            this.notificationEvent += subscriber;
+        }
+        public void UnSubscribe(Notification subscriber)
+        {
+            this.notificationEvent -= subscriber;
+        }
+    }*/
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("main program is running");
+
+            /*Notifier eventEmitter = new();
+
+            eventEmitter.Subscribe(subscriber1);
+            eventEmitter.Subscribe(subscriber2);
+            eventEmitter.Notify("JAMBALAYA!!!");
+
+            eventEmitter.UnSubscribe(subscriber1);
+            eventEmitter.Notify("RUSTY!!!");
+
+            eventEmitter.UnSubscribe(subscriber1);
+            eventEmitter.UnSubscribe(subscriber2);
+            eventEmitter.Notify("STELLAAAAA!!!");*/
+
+            NotificationService notificationService = new NotificationService();
+
+            notificationService.Register(EventType.GAME_STATE_CHANGE, subscriber1);
+            notificationService.Notify(EventType.GAME_STATE_CHANGE, "HELLOOO!!!");
+            notificationService.Register(EventType.GAME_STATE_CHANGE, subscriber2);
+            notificationService.Notify(EventType.GAME_STATE_CHANGE, "STELLAAAAAAAA!!!");
+            notificationService.Unregister(EventType.GAME_STATE_CHANGE, subscriber1);
+            notificationService.Unregister(EventType.GAME_STATE_CHANGE, subscriber2);
+            notificationService.Notify(EventType.GAME_STATE_CHANGE, "NEWMAN!!!");
+        }
+
+        static void subscriber1(object payload)
+        {
+            Console.WriteLine("subscriber1 received event with " + payload.ToString());
+        }
+
+        static void subscriber2(object payload)
+        {
+            Console.WriteLine("subscriber2 received event with " + payload.ToString());
+        }
+    }
+}
+
