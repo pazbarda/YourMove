@@ -1,4 +1,7 @@
-﻿using YourMoveApp.commons.util;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using YourMoveApp.commons.util;
 
 namespace YourMoveApp.commons.model
 {

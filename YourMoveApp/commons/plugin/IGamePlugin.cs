@@ -1,4 +1,5 @@
-﻿using YourMoveApp.commons.model;
+﻿using System;
+using YourMoveApp.commons.model;
 
 namespace YourMoveApp.commons.plugin
 {

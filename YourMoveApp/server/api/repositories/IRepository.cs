@@ -1,4 +1,7 @@
-﻿namespace YourMoveApp.server.api
+﻿using System;
+using System.Collections.Generic;
+
+namespace YourMoveApp.server.api
 {
     public interface IRepository<T>
     {

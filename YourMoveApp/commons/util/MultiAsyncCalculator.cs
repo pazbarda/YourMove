@@ -1,4 +1,8 @@
-﻿namespace YourMoveApp.commons.util
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace YourMoveApp.commons.util
 {
     public class MultiAsyncCalculator<A, R>
     {
