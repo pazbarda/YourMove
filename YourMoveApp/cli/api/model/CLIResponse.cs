@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YourMoveApp.cli.api.model
 {
-    class CLIResponse
+    public class CLIResponse
     {
         public string Title { get; }
 
