@@ -25,7 +25,7 @@ namespace YourMoveApp.cli.api.model.flow.item
 
         public override string Display => _display;
 
-        public override string Prompt => _display;
+        public override string Prompt => _prompt;
 
         protected override ProcessInput GetProcessInputDelegate()
         {
